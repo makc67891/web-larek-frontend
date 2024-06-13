@@ -1,8 +1,4 @@
-import { IEvents } from '../components/base/events';
-
-export type TCardId = Pick<ICard, 'id'>;
-
-export interface ICard {
+export interface IProduct {
 	id: string;
 	description: string;
 	image: string;
@@ -11,63 +7,80 @@ export interface ICard {
 	price: number | null;
 }
 
-export interface IOrder {
-	payment: string;
-	email: string;
-	phone: string;
-	address: string;
-	total: number | null;
-	items: TCardId[];
+export interface ICard extends IProduct{
+  index?: string;
+  buttonTitle? : string;
 }
 
-export interface ICardsData {
-	cards: ICard[];
-	preview: string | null;
-	events: IEvents;
-	getCard(cardId: string): ICard;
+export interface ICardInBasket {
+	index: number;
+	title: string;
+	price: number | null;
 }
 
-export interface IBasketData {
-	basketCards: TCardId[];
-	events: IEvents;
-	getTotalPrice(prices: number[]): number;
-	resetBasket(): void;
+export interface IAppData {
+  catalog: IProduct[];
+  basket: IProduct[];
+  preview: string | null;
+  delivery: IDeliveryForm | null;
+  contact: IContactForm | null;
+  order: IOrder | null;
 }
 
-export interface IPage {
-	basket: HTMLElement;
-	gallery: HTMLUListElement;
-	render(card: HTMLElement[]): void;
+export interface IPage{
+  counter: number;
+  catalog: HTMLElement[];
 }
 
-export interface IModal {
-	modal: HTMLElement;
-	events: IEvents;
-	addContent(elem: HTMLElement): void;
-	openModal(): void;
-	closeModal(): void;
+export interface IModalData {
+	content: HTMLElement;
 }
 
-export interface IModalWithForm extends IModal {
-	form: HTMLFormElement;
-	submitButton: HTMLButtonElement;
-	inputs: NodeListOf<HTMLInputElement>;
-	errors: Record<string, HTMLElement>;
-	setValid(isValid: boolean): string;
-  getInputValues(): Record<string, string>;
-  setErrors(data: { field: string, value: string, validInformation: string }): void;
-  showInputError (field: string, errorMessage: string): void;
-  hideInputError (field: string): void;
-  closeModal (): void
+export interface IBasketView {
+	items: HTMLElement[];
+	total: number;
+	selected: string[];
 }
 
-export interface IModalWithBasket extends IModal {
-  productList: HTMLUListElement;
-  totalPrice: HTMLElement;
-  submitButton: HTMLButtonElement;
+export interface IFormState {
+  valid: boolean;
+  errors: string[];
 }
 
-export interface IModalConfirm extends IModal {
-  totalPrice: HTMLElement;
-  submitButton: HTMLButtonElement;
+export interface IDeliveryForm {
+  payment: string;
+  address: string;
+}
+
+export interface IContactForm {
+  email: string;
+  phone: string;
+}
+
+export interface IOrder extends IDeliveryForm, IContactForm {
+  total: number;
+  items: string[];
+}
+
+export interface IOrderResult {
+  id: string;
+  total: number;
+}
+
+export interface IActions {
+	onClick: (event: MouseEvent) => void;
+}
+
+export interface ISuccess {
+  total: number;
+}
+
+export interface ISuccessActions {
+  onClick: () => void;
+}
+
+export interface IApi {
+	getProductList: () => Promise<IProduct[]>;
+  getProductItem: (id: string) => Promise<IProduct>;
+  orderProducts: (order: IOrder) => Promise<IOrderResult>
 }
