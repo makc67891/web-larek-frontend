@@ -1,4 +1,5 @@
 import { IActions, ICard } from '../types';
+import { cardCategory } from '../utils/constants';
 import { Component } from './base/Components';
 
 export class Card extends Component<ICard> {
@@ -48,38 +49,43 @@ export class Card extends Component<ICard> {
 		return this._id;
 	}
 
-	set title(title: string) {
-		this._title.textContent = title;
+	set title(value: string) {
+		this.setText(this._title, value)
 	}
 
-	set price(price: number | null) {
-		if (price) {
-			this._price.textContent = String(price) + ' синапсов';
+	get title(): string {
+    return this._title.textContent || '';
+  }
+
+	set price(value: number | null) {
+		if (value) {
+			this.setText(this._price, String(value) + ' синапсов')
 		} else {
-			this._price.textContent = 'Бесценно';
+			this.setText(this._price, 'Бесценно')
 		}
-		this.disabledButton(price);
+		this.disabledButton(value);
 	}
 
-	set description(description: string) {
-		if (this._description) this._description.textContent = description;
+	set description(value: string) {
+		this.setText(this._description, value)
 	}
 
-	set category(category: string) {
-		if (this._category) this._category.textContent = category;
+	set category(value: string) {
+		this._category.classList.add(cardCategory[value])
+		this.setText(this._category, value)
 	}
 
-	set image(image: string) {
-		this.setImage(this._image, image, this.title);
+	set image(value: string) {
+		this.setImage(this._image, value, this.title);
 	}
 
 	set index(value: string) {
-		this._index.textContent = value;
+		this.setText(this._index, value)
 	}
 
 	set buttonTitle(value: string) {
 		if (this._button) {
-			this._button.textContent = value;
+			this.setText(this._button, value)
 		}
 	}
 }

@@ -16,20 +16,15 @@ export class Basket extends Component<IBasketView> {
 		this._button = this.container.querySelector('.basket__button');
 
 		if (this._button) {
-			this._button.addEventListener('click', () => {
-				events.emit('order:open');
-			});
+			this._button.addEventListener('click', () => events.emit('order:open'));
 		}
 
 		this.items = [];
 	}
 
-	disableButton(value: string) {
-		this._button.setAttribute('disabled', value);
-	}
-
 	set items(items: HTMLElement[]) {
 		if (items.length) {
+			this.setDisabled(this._button, false);
 			this._list.replaceChildren(...items);
 		} else {
 			this._list.replaceChildren(
@@ -37,11 +32,12 @@ export class Basket extends Component<IBasketView> {
 					textContent: 'Корзина пуста',
 				})
 			);
+			this.setDisabled(this._button, true);
 		}
 	}
 
-	set total(total: number) {
-		this._total.textContent = `${String(total)} синапсов`;
+	set total(value: number) {
+		this.setText(this._total, `${String(value)} синапсов`)
 	}
 }
 
@@ -58,7 +54,7 @@ export class BasketItem extends Component<ICardInBasket> {
 		this._title = this.container.querySelector('.card__title');
 		this._price = this.container.querySelector('.card__price');
 		this._button = this.container.querySelector('.card__button');
-		this._index.textContent = String(index + 1);
+		this.setText(this._index, String(index + 1))
 
 		if (action?.onClick) {
 			if (this._button) {
@@ -68,14 +64,14 @@ export class BasketItem extends Component<ICardInBasket> {
 	}
 
 	set index(value: number) {
-		this._index.textContent = String(value);
+		this.setText(this._index, value)
 	}
 
 	set title(value: string) {
-		this._title.textContent = value;
+		this.setText(this._title, value)
 	}
 
 	set price(value: number) {
-		this._price.textContent = String(value);
+		this.setText(this._price, value)
 	}
 }

@@ -141,9 +141,9 @@ events.on('basket:open', () => {
 events.on('order:open', () => {
 	modal.render({
 		content: delivery.render({
-			payment: '',
-			address: '',
-			valid: false,
+			payment: appData.order.payment,
+			address: appData.order.address,
+			valid: appData.validateDelivery(),
 			errors: [],
 		}),
 	});
@@ -201,9 +201,9 @@ events.on('contact:ready', () => {
 events.on('order:submit', () => {
 	modal.render({
 		content: contact.render({
-			email: '',
-			phone: '',
-			valid: false,
+			email: appData.order.email,
+			phone: appData.order.phone,
+			valid: appData.validateContact(),
 			errors: [],
 		}),
 	});
